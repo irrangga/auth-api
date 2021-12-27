@@ -15,10 +15,6 @@ describe('HTTP server', () => {
     await AuthenticationsTableTestHelper.cleanTable()
   })
 
-  it('should be able to launch three browsers simultaneously', async () => {
-    jest.setTimeout(50000)
-  })
-
   it('should response 404 when request unregistered route', async () => {
     // Arrange
     const server = await createServer({})
