@@ -15,6 +15,10 @@ describe('HTTP server', () => {
     await AuthenticationsTableTestHelper.cleanTable()
   })
 
+  it('should be able to launch three browsers simultaneously', async () => {
+    jest.setTimeout(50000)
+  })
+
   it('should response 404 when request unregistered route', async () => {
     // Arrange
     const server = await createServer({})
@@ -27,6 +31,22 @@ describe('HTTP server', () => {
 
     // Assert
     expect(response.statusCode).toEqual(404)
+  })
+
+  describe('when GET /', () => {
+    it('should return 200 and hello world', async () => {
+      // Arrange
+      const server = await createServer({})
+      // Action
+      const response = await server.inject({
+        method: 'GET',
+        url: '/'
+      })
+      // Assert
+      const responseJson = JSON.parse(response.payload)
+      expect(response.statusCode).toEqual(200)
+      expect(responseJson.value).toEqual('Hello world!')
+    })
   })
 
   describe('when POST /users', () => {
