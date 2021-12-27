@@ -1,38 +1,38 @@
-const UserLogin = require('../../Domains/users/entities/UserLogin');
-const NewAuthentication = require('../../Domains/authentications/entities/NewAuth');
+const UserLogin = require('../../Domains/users/entities/UserLogin')
+const NewAuthentication = require('../../Domains/authentications/entities/NewAuth')
 
 class LoginUserUseCase {
-  constructor({
+  constructor ({
     userRepository,
     authenticationRepository,
     authenticationTokenManager,
-    passwordHash,
+    passwordHash
   }) {
-    this._userRepository = userRepository;
-    this._authenticationRepository = authenticationRepository;
-    this._authenticationTokenManager = authenticationTokenManager;
-    this._passwordHash = passwordHash;
+    this._userRepository = userRepository
+    this._authenticationRepository = authenticationRepository
+    this._authenticationTokenManager = authenticationTokenManager
+    this._passwordHash = passwordHash
   }
 
-  async execute(useCasePayload) {
-    const { username, password } = new UserLogin(useCasePayload);
+  async execute (useCasePayload) {
+    const { username, password } = new UserLogin(useCasePayload)
 
-    const encryptedPassword = await this._userRepository.getPasswordByUsername(username);
+    const encryptedPassword = await this._userRepository.getPasswordByUsername(username)
 
-    await this._passwordHash.compare(password, encryptedPassword);
+    await this._passwordHash.compare(password, encryptedPassword)
 
-    const accessToken = await this._authenticationTokenManager.createAccessToken({ username });
-    const refreshToken = await this._authenticationTokenManager.createRefreshToken({ username });
+    const accessToken = await this._authenticationTokenManager.createAccessToken({ username })
+    const refreshToken = await this._authenticationTokenManager.createRefreshToken({ username })
 
     const newAuthentication = new NewAuthentication({
       accessToken,
-      refreshToken,
-    });
+      refreshToken
+    })
 
-    await this._authenticationRepository.addToken(newAuthentication.refreshToken);
+    await this._authenticationRepository.addToken(newAuthentication.refreshToken)
 
-    return newAuthentication;
+    return newAuthentication
   }
 }
 
-module.exports = LoginUserUseCase;
+module.exports = LoginUserUseCase
