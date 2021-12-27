@@ -9,7 +9,7 @@
         "standard"
     ],
     "parserOptions": {
-        "ecmaVersion": 11
+        "ecmaVersion": 12
     },
     "rules": {
         "no-unused-vars": "off"
